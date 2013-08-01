@@ -46,7 +46,11 @@ class UsersController < ApplicationController
 
   def reset #get
 
-    @user = User.find_by_remember_token(params[:remember_token])
+    if @user = User.find_by_remember_token(params[:remember_token])
+      render '/reset'
+    else
+      redirect_to '/not_found'
+    end
 
     #reset takes in params in remember token, and has forms to reset password
     #if not found, then display message
@@ -69,6 +73,9 @@ class UsersController < ApplicationController
       flash[:error] = "Password problem. Please try again"
     end
 
+  end
+
+  def not_found
   end
 
 end

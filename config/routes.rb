@@ -12,7 +12,9 @@ CookBook::Application.routes.draw do
   get '/comments/:book_id' => 'comments#new'
   get '/forgotpassword' => 'users#forgotpassword'
   post '/password_reset' => 'users#password_reset'
-  get '/resetpassword/:remember_token' => 'users#reset'
+  get '/resetpassword/' => 'users#reset'
+  get '/not_found' => 'users#not_found'
+
 
 end
 
