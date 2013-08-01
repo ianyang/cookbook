@@ -23,11 +23,13 @@ class UsersController < ApplicationController
   def forgotpassword #get
   end
 
-  def create_remember_token #get
+  def password_reset #post
     @params = params[:q]
-
     if ( @user = User.find_by_email(@params) )
-      redirect_to 'http://www.google.com'
+      @user.create_remember_token
+      @user.save
+      UserMailer.reset_email(@user).deliver
+      redirect_to '/signin'
     else
       flash[:error] = "Email not found"
       redirect_to '/forgotpassword'
@@ -43,13 +45,30 @@ class UsersController < ApplicationController
   end
 
   def reset #get
+
+    @user = User.find_by_remember_token(params[:remember_token])
+
     #reset takes in params in remember token, and has forms to reset password
     #if not found, then display message
     #submit update
+
   end
 
   def update #post
     #update attributes of that user
+    @user = User.find(params[:id])
+
+    if @user.update_attributes(params[:user])
+      @user.create_remember_token
+      flash[:success] = "Password updated successfully"
+      sign_in @user
+      redirect_to @user
+    else
+      @link = "/resetpassword/"+@user.remember_token.to_s
+      redirect_to @link
+      flash[:error] = "Password problem. Please try again"
+    end
+
   end
 
 end

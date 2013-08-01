@@ -11,8 +11,8 @@ CookBook::Application.routes.draw do
   get '/stats' => 'stats#stats'
   get '/comments/:book_id' => 'comments#new'
   get '/forgotpassword' => 'users#forgotpassword'
-  get '/create_remember_token' => 'users#create_remember_token'
-
+  post '/password_reset' => 'users#password_reset'
+  get '/resetpassword/:remember_token' => 'users#reset'
 
 end
 
